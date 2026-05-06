@@ -17,13 +17,13 @@ public class ClientController {
     private ClientService clientService; // го inject-ира Interface-от, не Impl!
 
     @GetMapping
-    public List<Client> getAll() {
-        return clientService.getAll();
+    public ResponseEntity<List<Client>> getAll() {
+        return ResponseEntity.ok(clientService.getAll());
     }
 
     @GetMapping("/{id}")
-    public Client getById(@PathVariable Long id) {
-        return clientService.getById(id);
+    public ResponseEntity<Client> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(clientService.getById(id));
     }
 
     @PostMapping

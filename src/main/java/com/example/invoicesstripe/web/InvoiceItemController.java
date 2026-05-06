@@ -17,7 +17,7 @@ public class InvoiceItemController {
         this.invoiceItemService = invoiceItemService;
     }
 
-    @GetMapping("/invoice/{invoiceId}")
+    @GetMapping("/invoice/{invoiceId}") //gi vrakja site invoice-items za taa faktura(id)
     public ResponseEntity<List<InvoiceItem>> getByInvoice(@PathVariable Long invoiceId) {
         return ResponseEntity.ok(invoiceItemService.getByInvoiceId(invoiceId));
     }

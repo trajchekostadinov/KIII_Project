@@ -1,6 +1,6 @@
 package com.example.invoicesstripe.web;
 
-import com.example.invoicesstripe.model.Invoice;
+import  com.example.invoicesstripe.model.Invoice;
 import com.example.invoicesstripe.model.InvoiceStatus;
 import com.example.invoicesstripe.service.InvoiceService;
 import org.springframework.http.HttpStatus;
@@ -33,7 +33,7 @@ public class InvoiceController {
         return ResponseEntity.ok(invoiceService.getById(id));
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<Invoice> create(@RequestBody Invoice invoice) {
         return ResponseEntity.status(HttpStatus.CREATED).body(invoiceService.create(invoice));
     }

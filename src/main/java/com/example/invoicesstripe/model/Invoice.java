@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -40,7 +41,7 @@ public class Invoice {
 
     private String notes;
 
-    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"invoice"})  // ← ова го спречува infinite loop
-    private List<InvoiceItem> items;
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private List<InvoiceItem> items = new ArrayList<>();
 }

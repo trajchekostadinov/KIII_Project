@@ -1,6 +1,7 @@
 package com.example.invoicesstripe.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "clients")
 @Data
+@JsonIgnoreProperties({"createdAt"}) //zatoa sto avtomatski se dodava, ne treba, isto i id
 public class Client {
 
     @Id
@@ -24,17 +26,17 @@ public class Client {
     @Column(nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String email;
 
     private String phone;
+
     private String address;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Ако имате @OneToMany кон Invoice додадете:
     @OneToMany(mappedBy = "client")
-    @JsonIgnoreProperties({"client"})
+    @JsonIgnore
     private List<Invoice> invoices;
 }

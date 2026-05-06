@@ -18,6 +18,7 @@ public class InvoiceItem {
 
     @ManyToOne
     @JoinColumn(name = "invoice_id")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Invoice invoice;
 
     private String description;

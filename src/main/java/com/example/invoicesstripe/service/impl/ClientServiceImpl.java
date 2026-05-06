@@ -3,15 +3,17 @@ package com.example.invoicesstripe.service.impl;
 import com.example.invoicesstripe.model.Client;
 import com.example.invoicesstripe.repository.ClientRepository;
 import com.example.invoicesstripe.service.ClientService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class ClientServiceImpl implements ClientService {
 
-    @Autowired
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
+
+    public ClientServiceImpl(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
     @Override
     public List<Client> getAll() {

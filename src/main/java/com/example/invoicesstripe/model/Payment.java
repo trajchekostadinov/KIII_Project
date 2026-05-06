@@ -1,5 +1,6 @@
 package com.example.invoicesstripe.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class Payment {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "invoice_id")
+    @JsonIgnoreProperties({"client", "items"})
     private Invoice invoice;
 
     @Column(name = "stripe_payment_id")

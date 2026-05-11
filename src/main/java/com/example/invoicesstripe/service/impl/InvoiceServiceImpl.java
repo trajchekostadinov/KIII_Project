@@ -6,16 +6,20 @@ import com.example.invoicesstripe.model.InvoiceStatus;
 import com.example.invoicesstripe.repository.ClientRepository;
 import com.example.invoicesstripe.repository.InvoiceRepository;
 import com.example.invoicesstripe.service.InvoiceService;
+import com.example.invoicesstripe.service.StripeService;
+import com.stripe.exception.StripeException;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
-
+    private final StripeService stripeService;
     private final InvoiceRepository invoiceRepository;
     private final ClientRepository clientRepository;
 
-    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, ClientRepository clientRepository) {
+    public InvoiceServiceImpl(StripeService stripeService, InvoiceRepository invoiceRepository, ClientRepository clientRepository) {
+        this.stripeService = stripeService;
         this.invoiceRepository = invoiceRepository;
         this.clientRepository = clientRepository;
     }
@@ -64,5 +68,25 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public void delete(Long id) {
         invoiceRepository.deleteById(id);
+    }
+
+    @Override
+    public String generatePaymentLink(Long id) throws StripeException {
+        Invoice invoice = getById(id);
+        if(invoice.getPaymentToken()==null){
+            invoice.setPaymentToken(UUID.randomUUID().toString());
+            invoiceRepository.save(invoice);
+        }
+
+        return stripeService.createCheckoutSession(invoice);
+    }
+
+    @Override
+    public Invoice sendInvoice(Long id) throws StripeException {
+        Invoice invoice = getById(id);
+        String payment_link = generatePaymentLink(id);
+        invoice.setPaymentLink(payment_link);
+        invoice.setStatus(InvoiceStatus.SENT);
+        return invoiceRepository.save(invoice);
     }
 }

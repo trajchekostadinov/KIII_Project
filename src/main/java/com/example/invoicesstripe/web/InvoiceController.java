@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import com.stripe.exception.StripeException;
 
 @RestController
 @RequestMapping("/api/invoices")
@@ -41,6 +42,17 @@ public class InvoiceController {
     @PutMapping("/{id}")
     public ResponseEntity<Invoice> update(@PathVariable Long id, @RequestBody Invoice invoice) {
         return ResponseEntity.ok(invoiceService.update(id, invoice));
+    }
+
+    @PostMapping("/{id}/send")
+    public ResponseEntity<String> sendInvoice(@PathVariable Long id) {
+        try {
+            Invoice invoice = invoiceService.sendInvoice(id);
+            return ResponseEntity.ok(invoice.getPaymentLink());
+        } catch (StripeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Stripe error: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

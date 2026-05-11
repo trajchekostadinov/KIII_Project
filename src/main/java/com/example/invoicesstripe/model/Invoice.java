@@ -40,8 +40,9 @@ public class Invoice {
     private LocalDate dueDate;
 
     private String notes;
+        @Column(name = "payment_token", unique = true)
+        private String paymentToken;
 
-    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    private List<InvoiceItem> items = new ArrayList<>();
+    @Column(name = "payment_link", length = 500)
+    private String paymentLink;
 }

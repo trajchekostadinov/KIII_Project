@@ -14,7 +14,13 @@
         const response = await axios.put<Client>(`${API_URL}/${id}`, client);
         return response.data;
     };
-    export const createClient = async (client: Client): Promise<Client> => {
+    // export const createClient = async (client: Client): Promise<Client> => {
+    //     const response = await axios.post<Client>(API_URL, client);
+    //     return response.data;
+    // };
+    export const createClient = async (
+        client: Omit<Client, "id" | "createdAt">
+    ): Promise<Client> => {
         const response = await axios.post<Client>(API_URL, client);
         return response.data;
     };

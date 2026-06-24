@@ -49,11 +49,6 @@ public class InvoiceController {
         return ResponseEntity.ok(invoiceService.getById(id));
     }
 
-//    @PostMapping()
-//    public ResponseEntity<Invoice> create(@RequestBody Invoice invoice) {
-//        return ResponseEntity.status(HttpStatus.CREATED).body(invoiceService.create(invoice));
-//    }
-
     @PutMapping("/{id}")
     public ResponseEntity<Invoice> update(@PathVariable Long id, @RequestBody Invoice invoice) {
         return ResponseEntity.ok(invoiceService.update(id, invoice));
@@ -62,17 +57,16 @@ public class InvoiceController {
     @PostMapping("/{id}/send")
     public ResponseEntity<String> sendInvoice(@PathVariable Long id) throws StripeException {
 
-        Invoice invoice = invoiceService.getById(id);
-
-        String url = stripeService.createCheckoutSession(invoice);
+        Invoice invoice = invoiceService.sendInvoice(id);
 
         emailService.sendInvoiceEmail(
                 invoice.getClient().getEmail(),
-                url
+                invoice.getPaymentLink()
         );
 
-        return ResponseEntity.ok(url);
+        return ResponseEntity.ok(invoice.getPaymentLink());
     }
+
     @PostMapping("/pay/success")
     public ResponseEntity<String> markPaid(@RequestParam String token) {
 

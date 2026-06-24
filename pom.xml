@@ -61,7 +61,8 @@
         </dependency>
         <dependency>
             <groupId>com.stripe</groupId>
-            <artifactId>stripe-java</artifactId>
+            <artifactId>stripe-java</artifactId>ntend
+
             <version>26.3.0</version>
         </dependency>
         <dependency>

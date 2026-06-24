@@ -1,18 +1,27 @@
 package com.example.invoicesstripe.service.impl;
 
 import com.example.invoicesstripe.model.Client;
+import com.example.invoicesstripe.model.Invoice;
 import com.example.invoicesstripe.repository.ClientRepository;
+import com.example.invoicesstripe.repository.InvoiceRepository;
+import com.example.invoicesstripe.repository.PaymentRepository;
 import com.example.invoicesstripe.service.ClientService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+    private final InvoiceRepository invoiceRepository;
+    private final PaymentRepository paymentRepository;
 
-    public ClientServiceImpl(ClientRepository clientRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository, InvoiceRepository invoiceRepository,PaymentRepository paymentRepository) {
         this.clientRepository = clientRepository;
+        this.invoiceRepository = invoiceRepository;
+        this.paymentRepository = paymentRepository;
+
     }
 
     @Override
@@ -42,7 +51,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
+        List<Invoice> invoices = invoiceRepository.findByClient_Id(id);
+        for (Invoice invoice : invoices) {
+            paymentRepository.deleteAll(paymentRepository.findByInvoiceId(invoice.getId()));
+        }
+        invoiceRepository.deleteAll(invoices);
         clientRepository.deleteById(id);
     }
 }

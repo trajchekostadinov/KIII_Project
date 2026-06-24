@@ -49,6 +49,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (invoice.getStatus() == null) {
             invoice.setStatus(InvoiceStatus.DRAFT);
         }
+        if (invoice.getPaymentToken() == null) {
+            invoice.setPaymentToken(UUID.randomUUID().toString());
+        }
         return invoiceRepository.save(invoice);
     }
 

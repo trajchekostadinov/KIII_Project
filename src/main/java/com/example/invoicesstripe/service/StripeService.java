@@ -20,8 +20,11 @@ public class StripeService {
     @Value("${stripe.cancel.url}")
     private String cancelUrl;
 
-    public String createCheckoutSession(Invoice invoice) throws StripeException {
+    public String createCheckoutSession(Invoice invoice) throws StripeException{
+
         Stripe.apiKey = stripeApiKey;
+        System.out.println(stripeApiKey);
+
 
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
@@ -45,7 +48,12 @@ public class StripeService {
                 )
                 .build();
 
-        Session session = Session.create(params);
+        Session session = null;
+        try {
+            session = Session.create(params);
+        } catch (StripeException e) {
+            throw new RuntimeException(e);
+        }
         return session.getUrl();
     }
 }

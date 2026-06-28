@@ -1,7 +1,8 @@
 name: CI/CD Pipeline to DockerHub
+
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main", "master" ] # Се активира на push во main или master
 
 jobs:
   build-and-push:
@@ -23,17 +24,18 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # 1. Билдање и пуштање на Backend Имиџот (сега насочен кон главниот директориум)
       - name: Build and Push Backend
         uses: docker/build-push-action@v5
         with:
-          context: ./Backend
-          file: ./Backend/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/invoices-backend:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/invoices-backend:${{ github.sha }}
 
-
+      # 2. Билдање и пуштање на Frontend Имиџот
       - name: Build and Push Frontend
         uses: docker/build-push-action@v5
         with:

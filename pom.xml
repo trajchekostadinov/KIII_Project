@@ -6,8 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>4.0.6</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+        <relativePath/> </parent>
     <groupId>com.example</groupId>
     <artifactId>Invoices-Stripe</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -61,8 +60,7 @@
         </dependency>
         <dependency>
             <groupId>com.stripe</groupId>
-            <artifactId>stripe-java</artifactId>ntend
-
+            <artifactId>stripe-java</artifactId>
             <version>26.3.0</version>
         </dependency>
         <dependency>
@@ -152,5 +150,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

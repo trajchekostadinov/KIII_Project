@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+data:
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://db-service:5432/InvoicesDB"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invoices-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invoices-backend
+  template:
+    metadata:
+      labels:
+        app: invoices-backend
+    spec:
+      containers:
+        - name: backend
+
+          image: trajche0/invoices-backend:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: backend-config
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-user
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: invoices-backend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

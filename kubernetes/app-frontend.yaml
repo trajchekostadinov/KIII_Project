@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invoices-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invoices-frontend
+  template:
+    metadata:
+      labels:
+        app: invoices-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: trajche0/invoices-frontend:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: invoices-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

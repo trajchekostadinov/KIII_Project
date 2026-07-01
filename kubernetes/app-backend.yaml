@@ -4,6 +4,10 @@ metadata:
   name: backend-config
 data:
   SPRING_DATASOURCE_URL: "jdbc:postgresql://db-service:5432/InvoicesDB"
+  SPRING_PROFILES_ACTIVE: "dev"
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+  SPRING_FLYWAY_ENABLED: "false"
+  STRIPE_SECRET_KEY: "sk_test_51TVslBRsuONPSPvU9RZRUvKKfhfKlak5GoaVhfYQLi4swBPMPsDxEIAiVFbgF4u5lf7l054uN9s2RkNYhpVEVHmU00LtTKoa3c"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -24,7 +28,7 @@ spec:
 
           image: trajche0/invoices-backend:latest
           ports:
-            - containerPort: 8080
+            - containerPort: 9090
           envFrom:
             - configMapRef:
                 name: backend-config
@@ -49,5 +53,5 @@ spec:
     app: invoices-backend
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
+      port: 9090
+      targetPort: 9090
